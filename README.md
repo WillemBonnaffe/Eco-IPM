@@ -47,7 +47,7 @@ You are ready to explore the notebooks.
 
 The repository contains multiple notebooks that can be run sequentially.
 
-`A1-format-time-series.r` is an R script that formats the full time series of animal counts in Yellowstone.
+`A1-format-time-series.r` is an R script that formats the full time series of animal counts in Yellowstone by reading the input data files located in the `data` folder.
 
 `C1-setup-calibration.ipynb` is a jupyter notebook that prepares the Yellowstone ecosystem model (YEM) for fitting to the time series.  
 
@@ -109,4 +109,38 @@ All data necessary to parameterise and calibrate the model are located in the fo
 
 `data/master-v2025-05-15-17-06.xlsx` contains all raw time series of elk, bison, cougar, and wolves.
 
-`data/atchley-1989-table-8.csv` contains plant measurements grouped by soil type. `Soil` names the soil category; `Shoot wt. (g)` and `Root wt. (g)` give shoot and root weights in grams; `Height (cm)` gives plant height in centimetres; `Shoot/root` is the shoot-to-root weight ratio; and `% Emerg.` gives the percentage emergence.
+`data/atchley-1989-table-8.csv` contains plant measurements grouped by soil type. `Soil` names the soil category; `Shoot wt. (g)` and `Root wt. (g)` give shoot and root weights (g); `Height (cm)` gives plant height (cm); `Shoot/root` is the shoot-to-root weight ratio; and `% Emerg.` gives the percentage emergence.
+
+`data/bella-1980-table-1.csv` reports tree and plant biomass by stand age and density. `Age (years)` gives stand age; `Dominant height (m)` gives dominant tree height; `Number of trees (ha^-1)` gives tree density (ha^-1); `Woody material (kg·ha^-1)` and `Leaves (kg·ha^-1)` give woody and leaf biomass (kg·ha^-1); `Total (kg·ha^-1)` gives their total biomass (kg·ha^-1).
+
+`data/brice-2024-fig-7.csv` contains browse probability by plant height. `height` identifies the height measure (cm); `browse.probability` gives the corresponding probability. Data rows include an initial row identifier before these two values.
+
+`data/cole-2021-fig-6.csv` contains reproduction values by age. `age` identifies the age measure (years); `reproduction` gives the corresponding reproduction value. Data rows include an initial row identifier before these two values.
+
+`data/master-v2025-05-15-17-06.xlsx` contains the following sheets:
+
+- `sources`: `sheet` identifies the workbook sheet; `original_file_name` gives its source filename; `source` gives the source URL; `reference` gives the cited publication; `date_created` records when the source entry was added.
+- `versions`: `version` names a workbook version; `origin` names the workbook it derives from; `date` gives the version date; `comment` describes the change.
+- `grass-biomass`: `cell` identifies the sampling cell; `year` and `calendar_year` give the year; `period` gives the sampled period; `biomass` gives measured grass biomass (lb·acre^-1).
+- `willow-heights`: `willid_full` is a combined willow identifier; `year`, `period`, and `calendar_year` give timing; `treat` is the treatment; `site_id`, `exp`, and `willid` identify site, experiment, and plant; `fall_height` is fall plant height (cm); `species_id` identifies species; `fence` and `dam` indicate fencing and dam status; `browse` records browsing; `n_plants` is the plant sample size; `n_years` is the number of observation years; `min_year` and `max_year` give the observation range; `site_full` is a combined site identifier. Full metadata can be found in data/supporting-time-series/willow.
+- `aspen-heights`: `year`, `period`, and `calendar_year` give timing; `plot` and `tree` identify the sample; `new` indicates a newly recorded tree; `browse_winter` records winter browsing; `cag_cm` is change in annual growth (cm); `height_cm` is tree height (cm).
+- `elk-counts-uncorrected`: `year`, `period`, and `calendar_year` give the count timing; `northern_YNP_count` is the uncorrected elk count for Yellowstone’s northern range.
+- `elk-counts-corrected`: `year`, `period`, and `calendar_year` give the count timing; `northern_YNP_count` is the northern-range estimate; `northern_YNP_lwr_CL` and `northern_YNP_upr_CL` are its lower and upper confidence limits; `interior_YNP_mean`, `interior_YNP_lwr_CL`, and `interior_YNP_upr_CL` give the interior estimate and confidence limits; `exterior_YNP_mean`, `exterior_YNP_lwr_CL`, and `exterior_YNP_upr_CL` give the exterior estimate and confidence limits.
+- `elk-culls`: `year`, `period`, and `calendar_year` give the cull timing; `northern_YNP_culls` is the number of northern-range elk culled.
+- `bison-counts`: `year`, `period`, and `calendar_year` give the count timing; `northern_YNP_count`, `interior_YNP_count`, and `total_YNP_count` give bison counts for the northern range, interior, and park total; `comment` contains notes.
+- `bison-culls`: `year`, `period`, `period_old`, and `calendar_year` give cull timing in current and original formats; `northern_YNP_culls`, `interior_YNP_culls`, and `total_YNP_culls` give culls for the northern range, interior, and total.
+- `wolf-counts`: `year`, `period`, and `calendar_year` give the count timing; `northern_YNP_count`, `interior_YNP_count`, and `total_YNP_count` give wolf counts for the northern range, interior, and park total; `comment` contains notes.
+- `wolf-culls`: `year`, `period`, and `calendar_year` give the cull timing; `total_YNP_culls` is the total number of wolves culled in Yellowstone; `comment` contains notes.
+- `cougar-counts`: `year`, `period`, `period_old`, and `calendar_year` give count timing in current and original formats; `density_per_100km2` is cougar density (100 km²); `northern_YNP_count` is the northern-range count; `comment` contains notes.
+- `notes`: the first column contains the note date and the second contains the associated note text.
+
+---
+## Supplementary data
+
+These files are not necessary to run the pipeline but can be used to produce the initial input data files previously described.
+
+`supporting-data-2025-04-14-aspen` contains the supplementary analysis of aspen data. The file `analysis-aspen.r` contains the script of the analysis. The figures were digitised by converting x and y locations in pixels to x- and y-axis units. The intermediate files containing the `x` and `y` coordinates in pixels of the observations are named `<author>-<year>-fig-pixel-values.csv`, while those containing the `value` of x- and y-axes ticks and corresponding `x` and `y` pixel coordinates are named `<author>-<year>-fig-<x/y>-axis-pixel-values.csv`. 
+
+`supporting-data-2025-04-18-willow` contains the supplementary analysis of willow data. The file `analysis-aspen.r` contains the script of the analysis.
+
+The raw files for each sheet are located in the `supporting-time-series` folder. 
