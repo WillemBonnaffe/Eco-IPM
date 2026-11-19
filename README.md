@@ -4,6 +4,8 @@ This repository contains the code necessary to build, simulate, and fit multi-sp
 
 ## Get started
 
+### Set up locally
+
 First make sure that you have installed Python and Anaconda for managing virtual environments.
 
 To install the environment required for running the model run the following commands:
@@ -27,6 +29,15 @@ jupyter lab
 ```
 
 You are ready to explore the notebooks.
+
+### Set up on Colab
+
+1. Open [Google Colab](https://colab.research.google.com/).
+2. Sign in to your Google account.
+3. Select **File > Open notebook > GitHub** and enter the repository URL: <https://github.com/WillemBonnaffe/Eco-IPM>.
+4. Open `E1-tutorial-V2.ipynb`.
+5. To use GPU acceleration, select **Runtime > Change runtime type > T4 GPU**. You may need to click **Connect** in the top-right corner.
+6. Follow the instructions in the notebook.
 
 
 ## Notebooks
