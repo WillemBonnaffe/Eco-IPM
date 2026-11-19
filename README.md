@@ -2,6 +2,8 @@
 
 This repository contains the code necessary to build, simulate, and fit ecosystem integral projection models (Eco-IPMs).
 
+![Eco-IPM thumbnail](figures/thumbnail.pdf)
+
 ---
 ## Get started
 
