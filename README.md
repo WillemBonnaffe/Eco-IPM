@@ -12,6 +12,8 @@ First make sure that you have installed Python and Anaconda for managing virtual
 
 To install the environment required for running the model run the following commands:
 
+The Conda environment specification is provided in `environment.yaml`.
+
 ```
 conda env create --name mbipm --file=environment.yml
 conda activate mbipm
@@ -88,6 +90,8 @@ The notebooks call various files which are detailed below.
 
 `f_YEM_<model-version-name>.py` defines all functions necessary to initiate and simulate the YEM.
 
+`f_YEM_<model-version-name>_elasticity.py` defines functions to calculate the elasticity of the model dynamics.
+
 `f_YEM_wrapper_<model-version-name>.py` defines a wrapper to optimise the paramters of the YEM following DE optimisation. 
 
 `f_demc_sparse_noise.py` contains functions that are necessary to perform DE optimisation.
@@ -101,6 +105,15 @@ The notebooks call various files which are detailed below.
 `parameters-apriori-<model-version-name>.yaml` contains the values of all parameters in the YEM before calibration.
 
 `settings-apriori-<model-version-name>.yaml` contains the settings (e.g. number of bins) of the YEM both for usable before and after calibration.
+
+---
+## Outputs
+
+`A1-outputs/` contains the formatted time-series CSV and PNG figures produced while formatting the source time series.
+
+`C2-outputs/`, `C3-outputs/`, and `C4-outputs/` contain saved calibration chains and associated likelihood results for the artificial-data, cross-validation, and full-data calibration workflows, respectively.
+
+`figures/` contains PDF figures produced by the simulation, extirpation, sensitivity, and calibration-check notebooks.
 
 ---
 ## Data
