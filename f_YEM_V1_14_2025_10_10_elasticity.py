@@ -335,10 +335,10 @@ class YellowstoneEcosystemModel:
         """
         data = {}
 
-        # Iterate in original YAML order if available
+        ## Iterate in original YAML order if available
         keys = getattr(self, "_param_keys", list(self.params.keys()))
         for key in keys:
-            # Prefer the live attribute value; fall back to dict if missing
+            ## Prefer the live attribute value; fall back to dict if missing
             value = getattr(self, key, self.params.get(key))
 
             if isinstance(value, torch.Tensor):
@@ -348,10 +348,10 @@ class YellowstoneEcosystemModel:
                 else:            # 1D/2D tensor
                     data[key] = t.cpu().tolist()
             else:
-                # If someone replaced a tensor with a plain Python type/list
+                ## If someone replaced a tensor with a plain Python type/list
                 data[key] = value
 
-        # Write to YAML (preserve insertion order)
+        ## Write to YAML (preserve insertion order)
         with open(output_file, 'w') as f:
             yaml.safe_dump(data, f, sort_keys=False)
 
@@ -390,7 +390,7 @@ class YellowstoneEcosystemModel:
         ############################
         ## ACQUISITION OF BIOMASS ##
                 
-        # Available biomass through nutrients and herbivory
+        ## Available biomass through nutrients and herbivory
         Pt_d = Gt_d_0(Pt, 1 - self.phi_PG, NNt, self.bbeta_dh0_P)
         Pt_dn = Gt_dn_0(Pt, 1 - self.phi_PG)
         PPt_dh = GGt_dh_0(Pt, 1 - self.phi_PG, NNt, self.bbeta_dh0_P)  # shape: (n_species,)
@@ -400,28 +400,28 @@ class YellowstoneEcosystemModel:
         Pt_dh = PPt_dh.sum()
         Gt_dh = GGt_dh.sum()
         
-        # Scavenging: vectorized
+        ## Scavenging: vectorized
         ZZt_dn_raw = torch.stack([
             Zt_dn_i(zzz[i], NNNzt[i], self.bbeta_sn0[i], self.bbeta_sn1[i], self.bbeta_sn2[i])
             for i in range(len(NNt))
         ])  # shape: (n_species,)
         ZZt_dn = torch.matmul(self.bbbeta_dn0.T, ZZt_dn_raw.unsqueeze(1)).flatten()  # shape: (n_species,)
         
-        # Predation: vectorized
+        ## Predation: vectorized
         ZZt_dp_raw = torch.stack([
             ZZt_dp_i(
                 zzz[i], NNNzt[i], self.bbeta_sn0[i], self.bbeta_sn1[i], self.bbeta_sn2[i],
                 NNt, self.bbbeta_dp0[i], self.bbbeta_dp1[i], self.bbbeta_dp2[i]
             )
             for i in range(len(NNt))
-        ])  # shape: (n_species, zzz_len)
+        ])  ## shape: (n_species, zzz_len)
         ZZt_dp = ZZt_dp_raw.sum(dim=0)  # sum across predators
         
-        # Diet preference tensor (convert from list if needed)
+        ## Diet preference tensor (convert from list if needed)
         if not isinstance(self.lllambda, torch.Tensor):
             self.lllambda = torch.tensor(self.lllambda, dtype=torch.float64)
         
-        # Acquired biomass per species
+        ## Acquired biomass per species
         ZZt_c = (
             self.lllambda[:, 0] * PPt_dh +
             self.lllambda[:, 1] * GGt_dh +
@@ -429,7 +429,7 @@ class YellowstoneEcosystemModel:
             self.lllambda[:, 3] * ZZt_dp
         )  # shape: (n_species,)
         
-        # Not acquired biomass
+        ## Not acquired biomass
         Zt_notc = (
             (1 - self.lllambda[:, 0]) * PPt_dh +
             (1 - self.lllambda[:, 1]) * GGt_dh +
@@ -437,7 +437,7 @@ class YellowstoneEcosystemModel:
             (1 - self.lllambda[:, 3]) * ZZt_dp
         ).sum()  # scalar
         
-        # Excretion: still species-specific (keep as loop)
+        ## Excretion: still species-specific (keep as loop)
         Zt_e = torch.tensor(0.0, dtype=torch.float64)
         for i in range(len(NNt)):
             Zt_e += Zt_e_i(
@@ -587,45 +587,45 @@ class YellowstoneEcosystemModel:
         ######################
         ## DEFAULTS + SETUP ##
                     
-        # Default state values
+        ## Default state values
         Dt = Dt if isinstance(Dt, torch.Tensor) else torch.tensor(1e9, dtype=torch.float64)
         Bt = Bt if isinstance(Bt, torch.Tensor) else torch.tensor(1e9, dtype=torch.float64)
         Pt = Pt if isinstance(Pt, torch.Tensor) else torch.tensor(1e9, dtype=torch.float64)
         Gt = Gt if isinstance(Gt, torch.Tensor) else torch.tensor(1e9, dtype=torch.float64)
         
-        # Population sizes
+        ## Population sizes
         if NNt is None:
             NNt = torch.tensor([100000, 100000, 15000, 750, 30, 30], dtype=torch.float64)
         elif not isinstance(NNt, torch.Tensor):
             NNt = torch.tensor(NNt, dtype=torch.float64)
         
-        # Max phenotype values
+        ## Max phenotype values
         if zzmax is None:
             zzmax = torch.tensor([2000, 2000, 500, 1000, 200, 200], dtype=torch.float64)
         elif not isinstance(zzmax, torch.Tensor):
             zzmax = torch.tensor(zzmax, dtype=torch.float64)
         
-        # Placeholder for phenotype distributions
+        ## Placeholder for phenotype distributions
         if NNNzt is None:
             NNNzt = None  # Will be created below
         
         #####################
         ## INITIATE STATES ##
                 
-        # Time steps
+        ## Time steps
         tt = range(0, t_max + 1)
         
-        # Phenotype space — stacked tensor of shape (n_species, zzz_len)
+        ## Phenotype space — stacked tensor of shape (n_species, zzz_len)
         zzz = torch.stack([
             torch.linspace(0.01, zzmax[i].item(), zzz_len, dtype=torch.float64)
             for i in range(len(NNt))
         ])  # shape: (n_species, zzz_len)
         
-        # Transposed phenotype grids for 2D use
+        ## Transposed phenotype grids for 2D use
         zzz_mesh = torch.stack([torch.meshgrid(zzz[i], zzz[i], indexing="ij")[0] for i in range(len(NNt))])
         zzz_mesh_T = zzz_mesh.transpose(1, 2)  # shape: (n_species, zzz_len, zzz_len)
         
-        # Initial phenotype distributions
+        ## Initial phenotype distributions
         if NNNzt is None:
             Zt0_mean = zzmax / 3.0           # shape: (n_species,)
             Zt0_std = Zt0_mean / 10.0        # shape: (n_species,)
@@ -638,7 +638,7 @@ class YellowstoneEcosystemModel:
         else:
             NNNzt = torch.stack([z.clone().detach().to(dtype=torch.float64) for z in NNNzt])
         
-        # Initial condition tensors (shape: [1] for scalars, or [n_species, zzz_len])
+        ## Initial condition tensors (shape: [1] for scalars, or [n_species, zzz_len])
         DDt = Dt.unsqueeze(0)  # shape: (1,)
         BBt = Bt.unsqueeze(0)
         PPt = Pt.unsqueeze(0)
@@ -646,10 +646,10 @@ class YellowstoneEcosystemModel:
         NNNt = NNt.unsqueeze(0)
         NNNNzt = NNNzt.unsqueeze(0)  # shape: (1, n_species, zzz_len)
         
-        # Compute initial total biomass: sum across species and phenotypes
+        ## Compute initial total biomass: sum across species and phenotypes
         Zt_tot = (zzz * NNNzt).sum(dim=1).sum()  # first sum: per species, second: total
         
-        # Total biomass (tensors, shape: [1])
+        ## Total biomass (tensors, shape: [1])
         ttotal_biomass = Dt + Bt + Pt + Gt + Zt_tot
         ttotal_biomass = ttotal_biomass.unsqueeze(0)  # for time tracking
 
@@ -680,7 +680,7 @@ class YellowstoneEcosystemModel:
             ############################
             ## ACQUISITION OF BIOMASS ##
                     
-            # Available biomass through nutrients and herbivory
+            ## Available biomass through nutrients and herbivory
             Pt_d = Gt_d_0(Pt, 1 - self.phi_PG, NNt, self.bbeta_dh0_P)
             Pt_dn = Gt_dn_0(Pt, 1 - self.phi_PG)
             PPt_dh = GGt_dh_0(Pt, 1 - self.phi_PG, NNt, self.bbeta_dh0_P)  # shape: (n_species,)
@@ -690,14 +690,14 @@ class YellowstoneEcosystemModel:
             Pt_dh = PPt_dh.sum()
             Gt_dh = GGt_dh.sum()
             
-            # Scavenging: vectorized
+            ## Scavenging: vectorized
             ZZt_dn_raw = torch.stack([
                 Zt_dn_i(zzz[i], NNNzt[i], self.bbeta_sn0[i], self.bbeta_sn1[i], self.bbeta_sn2[i])
                 for i in range(len(NNt))
             ])  # shape: (n_species,)
             ZZt_dn = torch.matmul(self.bbbeta_dn0.T, ZZt_dn_raw.unsqueeze(1)).flatten()  # shape: (n_species,)
             
-            # Predation: vectorized
+            ## Predation: vectorized
             ZZt_dp_raw = torch.stack([
                 ZZt_dp_i(
                     zzz[i], NNNzt[i], self.bbeta_sn0[i], self.bbeta_sn1[i], self.bbeta_sn2[i],
@@ -707,11 +707,11 @@ class YellowstoneEcosystemModel:
             ])  # shape: (n_species, zzz_len)
             ZZt_dp = ZZt_dp_raw.sum(dim=0)  # sum across predators
             
-            # Diet preference tensor (convert from list if needed)
+            ## Diet preference tensor (convert from list if needed)
             if not isinstance(self.lllambda, torch.Tensor):
                 self.lllambda = torch.tensor(self.lllambda, dtype=torch.float64)
             
-            # Acquired biomass per species
+            ## Acquired biomass per species
             ZZt_c = (
                 self.lllambda[:, 0] * PPt_dh +
                 self.lllambda[:, 1] * GGt_dh +
@@ -719,7 +719,7 @@ class YellowstoneEcosystemModel:
                 self.lllambda[:, 3] * ZZt_dp
             )  # shape: (n_species,)
             
-            # Not acquired biomass
+            ## Not acquired biomass
             Zt_notc = (
                 (1 - self.lllambda[:, 0]) * PPt_dh +
                 (1 - self.lllambda[:, 1]) * GGt_dh +
@@ -727,7 +727,7 @@ class YellowstoneEcosystemModel:
                 (1 - self.lllambda[:, 3]) * ZZt_dp
             ).sum()  # scalar
             
-            # Excretion: still species-specific (keep as loop)
+            ## Excretion: still species-specific (keep as loop)
             Zt_e = torch.tensor(0.0, dtype=torch.float64)
             for i in range(len(NNt)):
                 Zt_e += Zt_e_i(
@@ -740,7 +740,7 @@ class YellowstoneEcosystemModel:
             #####################
             ## POPULATION STEP ##
                     
-            # Compute population at next time step
+            ## Compute population at next time step
             updated_NNNzt = []
             
             for i in range(len(NNt)):
@@ -761,20 +761,20 @@ class YellowstoneEcosystemModel:
                 else:
                     updated_NNNzt.append(torch.zeros_like(NNNzt[i]))
             
-            # Stack new population tensor
+            ## Stack new population tensor
             NNNzt = torch.stack(updated_NNNzt)  # shape: (n_species, zzz_len)
             
-            # Update total population per species
+            ## Update total population per species
             NNt = NNNzt.sum(dim=1)  # shape: (n_species,)
             
-            # Accumulate over time
+            ## Accumulate over time
             NNNNzt = torch.cat([NNNNzt, NNNzt.unsqueeze(0)], dim=0)  # (t, n_species, zzz_len)
             NNNt = torch.cat([NNNt, NNt.unsqueeze(0)], dim=0)        # (t, n_species)
             
             ####################
             ## ECOSYSTEM STEP ##
             
-            # Next state of ecosystem compartments
+            ## Next state of ecosystem compartments
             Dt, Bt, Pt, Gt = DBPG_tdt(
                 Dt, Bt, Pt, Gt,
                 self.phi_BD, self.phi_GD, self.phi_DP, self.phi_DB,
@@ -787,13 +787,13 @@ class YellowstoneEcosystemModel:
             biomass_t = Dt + Bt + Pt + Gt + Zt_tot
             Dt += ttotal_biomass[-1] - biomass_t
             
-            # Accumulate ecosystem compartments
+            ## Accumulate ecosystem compartments
             DDt = torch.cat([DDt, Dt.unsqueeze(0)], dim=0)
             BBt = torch.cat([BBt, Bt.unsqueeze(0)], dim=0)
             PPt = torch.cat([PPt, Pt.unsqueeze(0)], dim=0)
             GGt = torch.cat([GGt, Gt.unsqueeze(0)], dim=0)
             
-            # Total biomass: compute and accumulate
+            ## Total biomass: compute and accumulate
             Zt_tot = ((zzz * NNNzt).sum(dim=1)).sum()  # shape: scalar
             biomass_t = Dt + Bt + Pt + Gt + Zt_tot
             ttotal_biomass = torch.cat([ttotal_biomass, biomass_t.unsqueeze(0)], dim=0)
