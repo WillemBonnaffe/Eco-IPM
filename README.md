@@ -10,7 +10,7 @@ This repository contains the code necessary to build, simulate, and fit ecosyste
 ---
 ### Set up locally
 
-First make sure that you have installed Python and Anaconda for managing virtual environments.
+First, make sure that you have installed Python and Anaconda for managing virtual environments.
 
 To install the environment required for running the model run the following commands:
 
@@ -21,14 +21,14 @@ conda env create --name mbipm --file=environment.yaml
 conda activate mbipm
 ```
 
-If this does not work you may have to create an empty environment and install packages manually:
+If this does not work, you may have to create an empty environment and install packages manually:
 
 ```
 conda create -n mbipm python=3.10 numpy matplotlib seaborn jupyter
 conda activate mbipm
 pip3 install torch torchvision
 ```
-Now you can open jupyter lab by running in the terminal the following command:
+Now you can open JupyterLab by running the following command in the terminal:
 
 ```
 jupyter lab
@@ -53,7 +53,7 @@ The repository contains multiple notebooks that can be run sequentially.
 
 `A1-format-time-series.r` is an R script that formats the full time series of animal counts in Yellowstone by reading the input data files located in the `data` folder.
 
-`C1-setup-calibration.ipynb` is a jupyter notebook that prepares the Yellowstone ecosystem model (YEM) for fitting to the time series.  
+`C1-setup-calibration.ipynb` is a Jupyter notebook that prepares the Yellowstone ecosystem model (YEM) for fitting to the time series.  
 
 `C2-calibrate-artificial-data.ipynb` fits the YEM to simulated time-series data and visualises the parameter optimisation chains.
 
@@ -67,15 +67,15 @@ The repository contains multiple notebooks that can be run sequentially.
 
 `C4c-check-calibrate-full-repeated-1.ipynb` checks consistency of predictions in a repeated calibration run. 
 
-`D1-simulate.ipynb` takes the calibrated model and performs long term simulations.
+`D1-simulate.ipynb` takes the calibrated model and performs long-term simulations.
 
 `D2a-simulate-extirpation-short.ipynb` simulates short-term predator extirpation and reintroduction and estimates the time to perturbation and recovery equilibria.
 
 `D2b-simulate-extirpation-short-adjoint-sensitivity.ipynb` simulates short-term predator extirpation and reintroduction and calculates adjoint sensitivities during the experiment.
 
-`D2c-simulate-extirpation-short-adjoint-sensitivity-repeated-1.ipynb` check consistency of the short-term experiment with another model from a repeated calibration run.
+`D2c-simulate-extirpation-short-adjoint-sensitivity-repeated-1.ipynb` checks consistency of the short-term experiment with another model from a repeated calibration run.
 
-`D2d-simulate-extirpation-short-adjoint-sensitivity-repeated-2.ipynb` check consistency of the short-term experiment with another model from a repeated calibration run.
+`D2d-simulate-extirpation-short-adjoint-sensitivity-repeated-2.ipynb` checks consistency of the short-term experiment with another model from a repeated calibration run.
 
 `D2e-simulate-extirpation-long.ipynb` simulates long-term predator extirpation and reintroduction and estimates the time to perturbation and recovery equilibria.
 
@@ -88,25 +88,25 @@ The repository contains multiple notebooks that can be run sequentially.
 
 The notebooks call various files which are detailed below.
 
-`À1-outputs/A1-tab-all-time-series.csv` is the formatted time series that can be used to calibrate the model.
+`A1-outputs/A1-tab-all-time-series.csv` is the formatted time series that can be used to calibrate the model.
 
 `f_YEM_<model-version-name>.py` defines all functions necessary to initiate and simulate the YEM.
 
 `f_YEM_<model-version-name>_elasticity.py` defines functions to calculate the elasticity of the model dynamics.
 
-`f_YEM_wrapper_<model-version-name>.py` defines a wrapper to optimise the paramters of the YEM following DE optimisation. 
+`f_YEM_wrapper_<model-version-name>.py` defines a wrapper to optimise the parameters of the YEM following DE optimisation.
 
 `f_demc_sparse_noise.py` contains functions that are necessary to perform DE optimisation.
 
-`ìnitial-conditions-<model-version-name>.yaml` contains the initial state of the variables in the YEM before calibration.
+`initial-conditions-<model-version-name>.yaml` contains the initial state of the variables in the YEM before calibration.
 
-`ìnitial-conditions-apriori-<model-version-name>.yaml` contains the initial state of the variables in the YEM after calibration.
+`initial-conditions-apriori-<model-version-name>.yaml` contains the initial state of the variables in the YEM after calibration.
 
 `parameters-aposteriori-<model-version-name>.yaml` contains the values of all parameters in the YEM after calibration.
 
 `parameters-apriori-<model-version-name>.yaml` contains the values of all parameters in the YEM before calibration.
 
-`settings-apriori-<model-version-name>.yaml` contains the settings (e.g. number of bins) of the YEM both for usable before and after calibration.
+`settings-apriori-<model-version-name>.yaml` contains the settings (e.g. number of bins) of the YEM for use before and after calibration.
 
 ---
 ## Outputs
