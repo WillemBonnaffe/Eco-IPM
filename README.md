@@ -17,7 +17,7 @@ To install the environment required for running the model run the following comm
 The Conda environment specification is provided in `environment.yaml`.
 
 ```
-conda env create --name mbipm --file=environment.yml
+conda env create --name mbipm --file=environment.yaml
 conda activate mbipm
 ```
 
