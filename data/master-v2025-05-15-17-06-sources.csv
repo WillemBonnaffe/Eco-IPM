@@ -1,0 +1,12 @@
+﻿sheet,original_file_name,source,reference,date_created
+grass-biomass,NR_biomass.csv,https://zenodo.org/records/7392211,Smith et al. (2022),15.05.2025
+willow-heights,fall_height_data_2001_2020.csv,https://datadryad.org/dataset/doi:10.5061/dryad.sqv9s4n7n,Cooper & Hobbs (2023),15.05.2025
+aspen-heights,aspen_time_series.xlsx,Dan McNulty ,(pers. comm.),15.05.2025
+elk-counts-uncorrected,elk_count_1923_2025_includes helo counts.csv,Dan McNulty ,(pers. comm.),15.05.2025
+elk-counts-corrected,adjusted elk counts_1995-2023.xlsx,Dan McNulty,(pers. comm.),15.05.2025
+bison-counts,bison_time_series.xlsx,Dan McNulty,(pers. comm.),15.05.2025
+bison-culls,bison_time_series.xlsx,Dan McNulty,(pers. comm.),15.05.2025
+wolf-counts,wolf_time_series.xls,Dan McNulty,(pers. comm.),15.05.2025
+wolf-culls,wolf_time_series.xls,Dan McNulty,(pers. comm.),15.05.2025
+cougar-counts,cougar_time_series.xlsx,Dan McNulty,(pers. comm.),15.05.2025
+elk-culls,elk_cull_1969-2024.xlsx,Dan McNulty,(pers. comm.),16.05.2025
